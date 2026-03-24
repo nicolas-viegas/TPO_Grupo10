@@ -19,9 +19,11 @@ Pendientes:
 #----------------------------------------------------------------------------------------------
 # FUNCIONES
 #----------------------------------------------------------------------------------------------
-def altaCliente(clientes):
-    ...
-    return clientes
+def altaUsuario(usuarios):
+    dni =  input("Ingrese el DNI del cliente: ")
+    nombre = input("Ingrese el nombre del cliente: ")
+    apellido = input("Ingrese el apellido del cliente: ")
+    #return 
 
 
 
@@ -32,7 +34,8 @@ def main():
     #-------------------------------------------------
     # Inicialización de variables
     #----------------------------------------------------------------------------------------------
-    clientes = {...}
+    usuarios = [] # Lista de clientes, cada cliente es un diccionario con las claves: dni, nombre y apellido
+
 
 
     #-------------------------------------------------
