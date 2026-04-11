@@ -2,26 +2,23 @@
 -----------------------------------------------------------------------------------------------
 Título: Sistema de estacionamiento — TP Programación I
 Fecha: Abril 2026
-Autor: (completar)
+Autor: Grupo 10
 
 Descripción:
     Estacionamiento con 3 pisos: 1 motos, 2 autos, 3 camionetas (30 cupos por piso).
     Matrices: usuarios, vehículos, estacionamiento.
     Primera entrega: datos ficticios hardcodeados, menú y CRUD de usuarios.
 
-Restricción (consigna):
-    Sólo listas y matrices (listas de listas). No se usan diccionarios ni otros
-    tipos de estructura clave-valor.
 
 Pendientes:
-    CRUD vehículos, asignación de lugares, CRUD estacionamiento completo.
+    Modificar/baja vehículos, asignación de lugares, CRUD estacionamiento completo, agregar funciones facturacion
+    agregar funciones lambda para facturacion.
 -----------------------------------------------------------------------------------------------
 """
 
 # ----------------------------------------------------------------------------------------------
 # MÓDULOS
 # ----------------------------------------------------------------------------------------------
-# (agregar si hace falta, ej: import sys)
 
 # ----------------------------------------------------------------------------------------------
 # CONSTANTES
@@ -31,10 +28,11 @@ PISO_MOTOS = 1
 PISO_AUTOS = 2
 PISO_CAMIONETAS = 3
 
-# ----------------------------------------------------------------------------------------------
-# MATRICES — cada registro es una lista (fila); el conjunto es una lista de filas.
-# Sin diccionarios: se accede por índice (ej. fila[0], fila[1]).
-# ----------------------------------------------------------------------------------------------
+TARIFA_MENSUAL_MOTO = 50000
+TARIFA_MENSUAL_AUTO = 70000
+TARIFA_MENSUAL_CAMIONETA = 100000
+
+
 # usuarios: [id_usuario, nombre, apellido, dni]
 MATRIZ_USUARIOS = [
     [1, "Ana", "García", "28111222"],
@@ -43,14 +41,14 @@ MATRIZ_USUARIOS = [
     [4, "Pedro", "López", "20999888"],
 ]
 
-# vehículos: [id_vehiculo, patente, tipo, id_usuario]
+# vehículos: [id_vehiculo, patente, tipo, id_usuario, tarifa_mensual]
 # tipo: "moto" | "auto" | "camioneta"
 MATRIZ_VEHICULOS = [
-    [1, "AB123CD", "moto", 1],
-    [2, "XY987ZZ", "auto", 1],
-    [3, "AA000BB", "camioneta", 2],
-    [4, "MOTO99", "moto", 3],
-    [5, "CD456EF", "auto", 4],
+    [1, "AB123CD", "moto", 1, TARIFA_MENSUAL_MOTO],
+    [2, "XY987ZZ", "auto", 1, TARIFA_MENSUAL_AUTO],
+    [3, "AA000BB", "camioneta", 2, TARIFA_MENSUAL_CAMIONETA],
+    [4, "MOTO99", "moto", 3, TARIFA_MENSUAL_MOTO],
+    [5, "CD456EF", "auto", 4, TARIFA_MENSUAL_AUTO],
 ]
 
 # estacionamiento: [piso, nro_estacionamiento (1-30), id_vehiculo que ocupa el cupo]
@@ -75,6 +73,30 @@ def siguiente_id_usuario(usuarios):
 def buscar_usuario_por_id(usuarios, id_usuario):
     for fila in usuarios:
         if fila[0] == id_usuario:
+            return fila
+    return None
+
+
+def tarifa_mensual_por_tipo(tipo):
+    if tipo == "moto":
+        return TARIFA_MENSUAL_MOTO
+    if tipo == "auto":
+        return TARIFA_MENSUAL_AUTO
+    if tipo == "camioneta":
+        return TARIFA_MENSUAL_CAMIONETA
+    return None
+
+
+def siguiente_id_vehiculo(vehiculos):
+    if not vehiculos:
+        return 1
+    return max(fila[0] for fila in vehiculos) + 1
+
+
+def buscar_vehiculo_por_patente(vehiculos, patente):
+    p = patente.strip().upper()
+    for fila in vehiculos:
+        if fila[1].strip().upper() == p:
             return fila
     return None
 
@@ -163,17 +185,55 @@ def baja_usuario(usuarios):
 
 
 # ----------------------------------------------------------------------------------------------
-# VEHÍCULOS Y ESTACIONAMIENTO (solo lectura en esta entrega)
+# VEHÍCULOS Y ESTACIONAMIENTO
 # ----------------------------------------------------------------------------------------------
 def listar_vehiculos(vehiculos):
     if not vehiculos:
         print("No hay vehículos cargados.")
         return
     print()
-    print("ID veh. | Patente   | Tipo      | ID usuario")
-    print("-" * 45)
+    print("ID veh. | Patente   | Tipo      | ID usr | $ mensual")
+    print("-" * 55)
     for v in vehiculos:
-        print(f"{v[0]:7} | {v[1]:9} | {v[2]:9} | {v[3]}")
+        tarifa = v[4] if len(v) > 4 else "-"
+        print(f"{v[0]:7} | {v[1]:9} | {v[2]:9} | {v[3]:6} | {tarifa:9}")
+
+
+def alta_vehiculo(vehiculos, usuarios):
+    patente = input("Patente: ").strip().upper()
+    if not patente:
+        print("Error: la patente es obligatoria.")
+        return vehiculos
+    if buscar_vehiculo_por_patente(vehiculos, patente) is not None:
+        print("Error: ya existe un vehículo con esa patente.")
+        return vehiculos
+
+    print("Tipo: [1] moto  [2] auto  [3] camioneta")
+    ingresar_tipo = input("Seleccione tipo: ").strip()
+    if ingresar_tipo == "1":
+        tipo = "moto"
+    elif ingresar_tipo == "2":
+        tipo = "auto"
+    elif ingresar_tipo == "3":
+        tipo = "camioneta"
+    else:
+        print("Error: tipo inválido.")
+        return vehiculos
+
+    try:
+        id_usuario = int(input("ID de usuario (titular): ").strip())
+    except ValueError:
+        print("Error: ID de usuario inválido.")
+        return vehiculos
+    if buscar_usuario_por_id(usuarios, id_usuario) is None:
+        print("Error: no existe un usuario con ese ID.")
+        return vehiculos
+
+    tarifa = tarifa_mensual_por_tipo(tipo)
+    nuevo_id = siguiente_id_vehiculo(vehiculos)
+    vehiculos.append([nuevo_id, patente, tipo, id_usuario, tarifa])
+    print(f"Vehículo dado de alta. ID: {nuevo_id}. Tarifa mensual: ${tarifa}")
+    return vehiculos
 
 
 def listar_estacionamiento(estacionamiento):
@@ -290,7 +350,7 @@ def main():
                 if sub == "0":
                     break
                 elif sub == "1":
-                    mensaje_proximo()
+                    vehiculos = alta_vehiculo(vehiculos, usuarios)
                 elif sub == "2":
                     listar_vehiculos(vehiculos)
                 elif sub == "3":
