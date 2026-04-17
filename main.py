@@ -11,8 +11,7 @@ Descripción:
 
 
 Pendientes:
-    Modificar/baja vehículos, asignación de lugares, CRUD estacionamiento completo, agregar funciones facturacion
-    agregar funciones lambda para facturacion.
+    Facturación y funciones lambda para facturación.
 -----------------------------------------------------------------------------------------------
 """
 
@@ -101,6 +100,52 @@ def buscar_vehiculo_por_patente(vehiculos, patente):
     return None
 
 
+def buscar_vehiculo_por_id(vehiculos, id_vehiculo):
+    for fila in vehiculos:
+        if fila[0] == id_vehiculo:
+            return fila
+    return None
+
+
+def piso_para_tipo(tipo):
+    if tipo == "moto":
+        return PISO_MOTOS
+    if tipo == "auto":
+        return PISO_AUTOS
+    if tipo == "camioneta":
+        return PISO_CAMIONETAS
+    return None
+
+
+def indice_cupo_piso_y_numero(estacionamiento, piso, nro_cupo):
+    for i, e in enumerate(estacionamiento):
+        if e[0] == piso and e[1] == nro_cupo:
+            return i
+    return None
+
+
+def indice_cupo_por_id_vehiculo(estacionamiento, id_vehiculo):
+    for i, e in enumerate(estacionamiento):
+        if e[2] == id_vehiculo:
+            return i
+    return None
+
+
+def primer_cupo_libre_en_piso(estacionamiento, piso):
+    ocupados = {e[1] for e in estacionamiento if e[0] == piso}
+    for n in range(1, CUPOS_POR_PISO + 1):
+        if n not in ocupados:
+            return n
+    return None
+
+
+def entero_positivo_desde_cadena(cadena):
+    t = cadena.strip()
+    if not t or not t.isdigit():
+        return None
+    return int(t)
+
+
 # ----------------------------------------------------------------------------------------------
 # CRUD USUARIOS
 # ----------------------------------------------------------------------------------------------
@@ -129,9 +174,8 @@ def alta_usuario(usuarios):
 
 
 def consultar_usuario(usuarios):
-    try:
-        id_buscar = int(input("Ingrese ID de usuario: ").strip())
-    except ValueError:
+    id_buscar = entero_positivo_desde_cadena(input("Ingrese ID de usuario: "))
+    if id_buscar is None:
         print("ID inválido.")
         return
     u = buscar_usuario_por_id(usuarios, id_buscar)
@@ -142,9 +186,8 @@ def consultar_usuario(usuarios):
 
 
 def modificar_usuario(usuarios):
-    try:
-        id_buscar = int(input("Ingrese ID de usuario a modificar: ").strip())
-    except ValueError:
+    id_buscar = entero_positivo_desde_cadena(input("Ingrese ID de usuario a modificar: "))
+    if id_buscar is None:
         print("ID inválido.")
         return usuarios
     u = buscar_usuario_por_id(usuarios, id_buscar)
@@ -166,9 +209,8 @@ def modificar_usuario(usuarios):
 
 
 def baja_usuario(usuarios):
-    try:
-        id_buscar = int(input("Ingrese ID de usuario a eliminar: ").strip())
-    except ValueError:
+    id_buscar = entero_positivo_desde_cadena(input("Ingrese ID de usuario a eliminar: "))
+    if id_buscar is None:
         print("ID inválido.")
         return usuarios
     for i, fila in enumerate(usuarios):
@@ -220,9 +262,8 @@ def alta_vehiculo(vehiculos, usuarios):
         print("Error: tipo inválido.")
         return vehiculos
 
-    try:
-        id_usuario = int(input("ID de usuario (titular): ").strip())
-    except ValueError:
+    id_usuario = entero_positivo_desde_cadena(input("ID de usuario (titular): "))
+    if id_usuario is None:
         print("Error: ID de usuario inválido.")
         return vehiculos
     if buscar_usuario_por_id(usuarios, id_usuario) is None:
@@ -236,6 +277,33 @@ def alta_vehiculo(vehiculos, usuarios):
     return vehiculos
 
 
+def baja_vehiculo(vehiculos, estacionamiento):
+    id_buscar = entero_positivo_desde_cadena(input("Ingrese ID de vehículo a eliminar: "))
+    if id_buscar is None:
+        print("ID inválido.")
+        return vehiculos, estacionamiento
+    v = buscar_vehiculo_por_id(vehiculos, id_buscar)
+    if v is None:
+        print("No existe un vehículo con ese ID.")
+        return vehiculos, estacionamiento
+
+    confirmar = input(f"¿Eliminar vehículo {v[1]} ({v[2]})? (s/n): ").strip().lower()
+    if confirmar != "s":
+        print("Operación cancelada.")
+        return vehiculos, estacionamiento
+
+    idx_est = indice_cupo_por_id_vehiculo(estacionamiento, id_buscar)
+    if idx_est is not None:
+        estacionamiento.pop(idx_est)
+
+    for i, fila in enumerate(vehiculos):
+        if fila[0] == id_buscar:
+            vehiculos.pop(i)
+            break
+    print("Vehículo eliminado.")
+    return vehiculos, estacionamiento
+
+
 def listar_estacionamiento(estacionamiento):
     if not estacionamiento:
         print("No hay cupos ocupados registrados.")
@@ -247,8 +315,124 @@ def listar_estacionamiento(estacionamiento):
         print(f"{e[0]:4} | {e[1]:8} | {e[2]}")
 
 
-def mensaje_proximo():
-    print("todavia no hecho")
+def asignar_cupo(vehiculos, estacionamiento):
+    id_v = entero_positivo_desde_cadena(input("ID de vehículo a estacionar: "))
+    if id_v is None:
+        print("ID inválido.")
+        return estacionamiento
+    v = buscar_vehiculo_por_id(vehiculos, id_v)
+    if v is None:
+        print("No existe un vehículo con ese ID.")
+        return estacionamiento
+
+    if indice_cupo_por_id_vehiculo(estacionamiento, id_v) is not None:
+        print("Ese vehículo ya tiene un cupo asignado. Libérelo antes de reasignar.")
+        return estacionamiento
+
+    piso = piso_para_tipo(v[2])
+    nro = primer_cupo_libre_en_piso(estacionamiento, piso)
+    if nro is None:
+        print(f"No hay cupos libres en el piso {piso} (máximo {CUPOS_POR_PISO} por piso).")
+        return estacionamiento
+
+    estacionamiento.append([piso, nro, id_v])
+    print(
+        f"Vehículo tipo «{v[2]}» → piso {piso}. "
+        f"Cupo asignado automáticamente: lugar {nro} (vehículo ID {id_v})."
+    )
+    return estacionamiento
+
+
+def liberar_cupo(estacionamiento):
+    print("Modo: [1] por piso y número de cupo  [2] por ID de vehículo")
+    modo = input("Seleccione: ").strip()
+    idx = None
+    if modo == "1":
+        piso = entero_positivo_desde_cadena(input("Piso (1-3): "))
+        nro = entero_positivo_desde_cadena(input(f"Número de cupo (1-{CUPOS_POR_PISO}): "))
+        if piso is None or piso < 1 or piso > 3 or nro is None or nro < 1 or nro > CUPOS_POR_PISO:
+            print("Datos inválidos.")
+            return estacionamiento
+        idx = indice_cupo_piso_y_numero(estacionamiento, piso, nro)
+        if idx is None:
+            print("No hay vehículo en ese cupo.")
+            return estacionamiento
+    elif modo == "2":
+        id_v = entero_positivo_desde_cadena(input("ID de vehículo: "))
+        if id_v is None:
+            print("ID inválido.")
+            return estacionamiento
+        idx = indice_cupo_por_id_vehiculo(estacionamiento, id_v)
+        if idx is None:
+            print("Ese vehículo no tiene cupo asignado.")
+            return estacionamiento
+    else:
+        print("Opción inválida.")
+        return estacionamiento
+
+    liberado = estacionamiento.pop(idx)
+    print(f"Cupo liberado: piso {liberado[0]}, lugar {liberado[1]}, vehículo ID {liberado[2]}.")
+    return estacionamiento
+
+
+def consultar_cupo(estacionamiento, vehiculos):
+    print()
+    print("¿Cómo quiere consultar?")
+    print("  [1] Ver si un lugar (piso + número de cupo) está ocupado o vacío.")
+    print("  [2] Ver en qué piso y cupo está estacionado un vehículo (por su ID).")
+    modo = input("Seleccione (1 o 2): ").strip()
+    if modo == "1":
+        piso = entero_positivo_desde_cadena(input("Piso (1-3): "))
+        nro = entero_positivo_desde_cadena(input(f"Número de cupo (1-{CUPOS_POR_PISO}): "))
+        if piso is None or piso < 1 or piso > 3 or nro is None or nro < 1 or nro > CUPOS_POR_PISO:
+            print("Datos inválidos.")
+            return
+        idx = indice_cupo_piso_y_numero(estacionamiento, piso, nro)
+        if idx is None:
+            print()
+            print(f"Piso {piso}, cupo {nro}: no hay ningún vehículo cargado en ese lugar.")
+            print("(En la matriz de estacionamiento no figura ocupado; se puede asignar un vehículo ahí.)")
+            return
+        id_v = estacionamiento[idx][2]
+        v = buscar_vehiculo_por_id(vehiculos, id_v)
+        if v is None:
+            print()
+            print(
+                f"Piso {piso}, cupo {nro}: ocupado según el estacionamiento (ID vehículo {id_v}), "
+                "pero ese ID no está en la matriz de vehículos."
+            )
+            return
+        print()
+        print(f"Piso {piso}, cupo {nro}: OCUPADO.")
+        print(
+            f"  Vehículo ID {v[0]} | patente {v[1]} | tipo {v[2]} | titular usuario ID {v[3]}"
+        )
+    elif modo == "2":
+        id_v = entero_positivo_desde_cadena(input("ID de vehículo: "))
+        if id_v is None:
+            print("ID inválido.")
+            return
+        idx = indice_cupo_por_id_vehiculo(estacionamiento, id_v)
+        if idx is None:
+            print()
+            print(f"El vehículo ID {id_v} no tiene cupo asignado (no aparece en la matriz de estacionamiento).")
+            return
+        e = estacionamiento[idx]
+        v = buscar_vehiculo_por_id(vehiculos, id_v)
+        if v is None:
+            print()
+            print(
+                f"Vehículo ID {id_v}: figura en piso {e[0]}, cupo {e[1]}, "
+                "pero no hay fila con ese ID en la matriz de vehículos."
+            )
+            return
+        print()
+        print(
+            f"Vehículo ID {id_v} ({v[1]}, {v[2]}): estacionado en piso {e[0]}, cupo {e[1]}."
+        )
+        print(f"  Titular del vehículo: usuario ID {v[3]}.")
+    else:
+        print("Opción inválida.")
 
 
 # ----------------------------------------------------------------------------------------------
@@ -327,15 +511,14 @@ def main():
         elif opcion == "2":
             while True:
                 while True:
-                    opciones = 4
+                    opciones = 3
                     print()
                     print("---------------------------")
                     print("MENÚ PRINCIPAL > VEHÍCULOS")
                     print("---------------------------")
                     print("[1] Alta de vehículo")
                     print("[2] Listar vehículos")
-                    print("[3] Modificar vehículo")
-                    print("[4] Baja de vehículo")
+                    print("[3] Baja de vehículo")
                     print("---------------------------")
                     print("[0] Volver al menú anterior")
                     print("---------------------------")
@@ -354,9 +537,7 @@ def main():
                 elif sub == "2":
                     listar_vehiculos(vehiculos)
                 elif sub == "3":
-                    mensaje_proximo()
-                elif sub == "4":
-                    mensaje_proximo()
+                    vehiculos, estacionamiento = baja_vehiculo(vehiculos, estacionamiento)
 
                 input("\nPresione ENTER para continuar.")
 
@@ -387,13 +568,13 @@ def main():
                 if sub == "0":
                     break
                 elif sub == "1":
-                    mensaje_proximo()
+                    estacionamiento = asignar_cupo(vehiculos, estacionamiento)
                 elif sub == "2":
                     listar_estacionamiento(estacionamiento)
                 elif sub == "3":
-                    mensaje_proximo()
+                    estacionamiento = liberar_cupo(estacionamiento)
                 elif sub == "4":
-                    mensaje_proximo()
+                    consultar_cupo(estacionamiento, vehiculos)
 
                 input("\nPresione ENTER para continuar.")
 
