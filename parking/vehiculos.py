@@ -17,8 +17,11 @@ def listar_vehiculos(vehiculos):
     print("ID veh. | Patente   | Tipo      | ID usr | $ mensual")
     print("-" * 55)
     for v in vehiculos:
-        tarifa = v[4] if len(v) > 4 else "-"
-        print(f"{v[0]:7} | {v[1]:9} | {v[2]:9} | {v[3]:6} | {tarifa:9}")
+        tarifa = v.get("tarifa", "-")
+        print(
+            f"{v['id']:7} | {v['patente']:9} | {v['tipo']:9} | "
+            f"{v['usuario']:6} | {tarifa!s:>9}"
+        )
 
 
 def alta_vehiculo(vehiculos, usuarios):
@@ -52,7 +55,15 @@ def alta_vehiculo(vehiculos, usuarios):
 
     tarifa = tarifa_mensual_por_tipo(tipo)
     nuevo_id = siguiente_id_vehiculo(vehiculos)
-    vehiculos.append([nuevo_id, patente, tipo, id_usuario, tarifa])
+    vehiculos.append(
+        {
+            "id": nuevo_id,
+            "patente": patente,
+            "tipo": tipo,
+            "usuario": id_usuario,
+            "tarifa": tarifa,
+        }
+    )
     print(f"Vehículo dado de alta. ID: {nuevo_id}. Tarifa mensual: ${tarifa}")
     return vehiculos
 
@@ -67,7 +78,7 @@ def baja_vehiculo(vehiculos, estacionamiento):
         print("No existe un vehículo con ese ID.")
         return vehiculos, estacionamiento
 
-    confirmar = input(f"¿Eliminar vehículo {v[1]} ({v[2]})? (s/n): ").strip().lower()
+    confirmar = input(f"¿Eliminar vehículo {v['patente']} ({v['tipo']})? (s/n): ").strip().lower()
     if confirmar != "s":
         print("Operación cancelada.")
         return vehiculos, estacionamiento
@@ -77,7 +88,7 @@ def baja_vehiculo(vehiculos, estacionamiento):
         estacionamiento.pop(idx_est)
 
     for i, fila in enumerate(vehiculos):
-        if fila[0] == id_buscar:
+        if fila["id"] == id_buscar:
             vehiculos.pop(i)
             break
     print("Vehículo eliminado.")

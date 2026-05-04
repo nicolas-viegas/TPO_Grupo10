@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------
-# CONSTANTES Y MATRICES INICIALES (datos de ejemplo)
+# CONSTANTES Y DATOS INICIALES (listas de diccionarios)
 # ----------------------------------------------------------------------------------------------
 CUPOS_POR_PISO = 5
 PISO_MOTOS = 1
@@ -11,28 +11,28 @@ TARIFA_MENSUAL_MOTO = 42000
 TARIFA_MENSUAL_AUTO = 68000
 TARIFA_MENSUAL_CAMIONETA = 95000
 
-# usuarios: [id_usuario, nombre, apellido, dni]
-MATRIZ_USUARIOS = [
-    [1, "Ana", "García", "28111222"],
-    [2, "Luis", "Rodríguez", "35111222"],
-    [3, "María", "Fernández", "40111222"],
-    [4, "Pedro", "López", "20999888"],
+# usuarios: id, nombre, apellido, dni
+USUARIOS_INICIAL = [
+    {"id": 1, "nombre": "Ana", "apellido": "García", "dni": "28111222"},
+    {"id": 2, "nombre": "Luis", "apellido": "Rodríguez", "dni": "35111222"},
+    {"id": 3, "nombre": "María", "apellido": "Fernández", "dni": "40111222"},
+    {"id": 4, "nombre": "Pedro", "apellido": "López", "dni": "20999888"},
 ]
 
-# vehículos: [id_vehiculo, patente, tipo, id_usuario, tarifa_mensual]
-MATRIZ_VEHICULOS = [
-    [1, "AB123CD", "moto", 1, TARIFA_MENSUAL_MOTO],
-    [2, "XY987ZZ", "auto", 1, TARIFA_MENSUAL_AUTO],
-    [3, "AA000BB", "camioneta", 2, TARIFA_MENSUAL_CAMIONETA],
-    [4, "MOTO99", "moto", 3, TARIFA_MENSUAL_MOTO],
-    [5, "CD456EF", "auto", 4, TARIFA_MENSUAL_AUTO],
+# vehículos: id, patente, tipo, usuario (id del titular), tarifa
+VEHICULOS_INICIAL = [
+    {"id": 1, "patente": "AB123CD", "tipo": "moto", "usuario": 1, "tarifa": TARIFA_MENSUAL_MOTO},
+    {"id": 2, "patente": "XY987ZZ", "tipo": "auto", "usuario": 1, "tarifa": TARIFA_MENSUAL_AUTO},
+    {"id": 3, "patente": "AA000BB", "tipo": "camioneta", "usuario": 2, "tarifa": TARIFA_MENSUAL_CAMIONETA},
+    {"id": 4, "patente": "MOTO99", "tipo": "moto", "usuario": 3, "tarifa": TARIFA_MENSUAL_MOTO},
+    {"id": 5, "patente": "CD456EF", "tipo": "auto", "usuario": 4, "tarifa": TARIFA_MENSUAL_AUTO},
 ]
 
-# estacionamiento: [piso, nro_estacionamiento (1..CUPOS_POR_PISO), id_vehiculo]
-MATRIZ_ESTACIONAMIENTO = [
-    [1, 1, 1],
-    [1, 2, 4],
-    [2, 1, 2],
-    [2, 3, 5],
-    [3, 4, 3],
+# estacionamiento: piso, cupo (1..CUPOS_POR_PISO), vehiculo (id del vehículo)
+ESTACIONAMIENTO_INICIAL = [
+    {"piso": 1, "cupo": 1, "vehiculo": 1},
+    {"piso": 1, "cupo": 2, "vehiculo": 4},
+    {"piso": 2, "cupo": 1, "vehiculo": 2},
+    {"piso": 2, "cupo": 3, "vehiculo": 5},
+    {"piso": 3, "cupo": 4, "vehiculo": 3},
 ]

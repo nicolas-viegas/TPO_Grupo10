@@ -1,44 +1,59 @@
 from parking.utilidades import cadena_a_entero
 
-ENCABEZADOS_USUARIOS = ["ID usuario", "Nombre", "Apellido", "DNI"]
-ENCABEZADOS_VEHICULOS = ["ID vehículo", "Patente", "Tipo", "ID usuario", "Tarifa mensual"]
-ENCABEZADOS_ESTACIONAMIENTO = ["Piso", "Nro cupo", "ID vehículo"]
+CAMPOS_USUARIOS = ("id", "nombre", "apellido", "dni")
+CAMPOS_VEHICULOS = ("id", "patente", "tipo", "usuario", "tarifa")
+CAMPOS_ESTACIONAMIENTO = ("piso", "cupo", "vehiculo")
 
-# Mismo ancho para todas las columnas (f"{valor:18}" aprox.; subí el número si hace falta)
+ROTULOS_USUARIOS = {
+    "id": "ID usuario",
+    "nombre": "Nombre",
+    "apellido": "Apellido",
+    "dni": "DNI",
+}
+ROTULOS_VEHICULOS = {
+    "id": "ID vehículo",
+    "patente": "Patente",
+    "tipo": "Tipo",
+    "usuario": "ID usuario (titular)",
+    "tarifa": "Tarifa mensual",
+}
+ROTULOS_ESTACIONAMIENTO = {
+    "piso": "Piso",
+    "cupo": "Nro cupo",
+    "vehiculo": "ID vehículo",
+}
+
 ANCHO_COLUMNA_TABLA = 18
 
 
-def _linea_con_ancho_fijo(celdas, n_columnas, ancho):
-    return " ".join(f"{str(celdas[i]):<{ancho}}" for i in range(n_columnas))
+def _linea_con_ancho_fijo(valores, ancho):
+    return " ".join(f"{str(v):<{ancho}}" for v in valores)
 
 
-def ordenar_matriz_por_columna(matriz, indice_columna):
-    """
-    Ordena las filas de la matriz en forma ascendente según la columna indicada.
-    Usa list.sort con key (por valor de esa columna en cada fila).
-    """
-    matriz.sort(key=lambda fila: fila[indice_columna])
-    return matriz
+def ordenar_registros_por_campo(registros, campo):
+    """Orden ascendente por el valor de una clave en cada diccionario."""
+    registros.sort(key=lambda r: r[campo])
+    return registros
 
 
-def mostrar_matriz_con_encabezados(titulo, encabezados, matriz):
-    if not matriz:
-        print(f"\n{titulo}: (sin filas)")
+def mostrar_registros_tabla(titulo, orden_campos, rotulos, registros):
+    if not registros:
+        print(f"\n{titulo}: (sin registros)")
         return
     print()
     print(titulo)
-    n = len(encabezados)
+    encabezados = [rotulos[c] for c in orden_campos]
     w = ANCHO_COLUMNA_TABLA
-    print(_linea_con_ancho_fijo(encabezados, n, w))
-    print("-" * (n * w))
-    for fila in matriz:
-        celdas = [fila[i] if i < len(fila) else "" for i in range(n)]
-        print(_linea_con_ancho_fijo(celdas, n, w))
+    print(_linea_con_ancho_fijo(encabezados, w))
+    print("-" * (len(encabezados) * w))
+    for r in registros:
+        fila = [r[c] for c in orden_campos]
+        print(_linea_con_ancho_fijo(fila, w))
 
 
 def flujo_ordenar_matriz(usuarios, vehiculos, estacionamiento):
     print()
-    print("¿Qué matriz desea ordenar?")
+    print("¿Qué listado desea ordenar?")
     print("[1] Usuarios")
     print("[2] Vehículos")
     print("[3] Estacionamiento")
@@ -47,36 +62,45 @@ def flujo_ordenar_matriz(usuarios, vehiculos, estacionamiento):
     if op == "0":
         return
     if op == "1":
-        matriz, titulo, encabezados = usuarios, "Matriz de usuarios (ordenada)", ENCABEZADOS_USUARIOS
+        registros = usuarios
+        titulo = "Usuarios (ordenados)"
+        orden_campos = CAMPOS_USUARIOS
+        rotulos = ROTULOS_USUARIOS
     elif op == "2":
-        matriz, titulo, encabezados = vehiculos, "Matriz de vehículos (ordenada)", ENCABEZADOS_VEHICULOS
+        registros = vehiculos
+        titulo = "Vehículos (ordenados)"
+        orden_campos = CAMPOS_VEHICULOS
+        rotulos = ROTULOS_VEHICULOS
     elif op == "3":
-        matriz, titulo, encabezados = (
-            estacionamiento,
-            "Matriz de estacionamiento (ordenada)",
-            ENCABEZADOS_ESTACIONAMIENTO,
-        )
+        registros = estacionamiento
+        titulo = "Estacionamiento (ordenado)"
+        orden_campos = CAMPOS_ESTACIONAMIENTO
+        rotulos = ROTULOS_ESTACIONAMIENTO
     else:
         print("Opción inválida.")
         return
 
-    if not matriz:
-        print("La matriz está vacía; no hay nada que ordenar.")
+    if not registros:
+        print("No hay registros para ordenar.")
         return
 
-    num_columnas = len(matriz[0])
+    n = len(orden_campos)
     print()
-    print(f"Ingrese el número de columna por la cual ordenar (1 a {num_columnas}), ascendente:")
-    for i in range(num_columnas):
-        print(f"  {i + 1} = {encabezados[i]}")
+    print(f"Ingrese el número de campo por el cual ordenar (1 a {n}), ascendente:")
+    for i, campo in enumerate(orden_campos):
+        print(f"  {i + 1} = {rotulos[campo]}")
 
-    col_txt = input("Número de columna: ").strip()
+    col_txt = input("Número de campo: ").strip()
     col = cadena_a_entero(col_txt)
-    if col is None or col < 1 or col > num_columnas:
-        print("Número de columna inválido.")
+    if col is None or col < 1 or col > n:
+        print("Número inválido.")
         return
 
-    indice = col - 1
-    ordenar_matriz_por_columna(matriz, indice)
-    print(f"\nOrden aplicado por columna {col} («{encabezados[indice]}»), ascendente.")
-    mostrar_matriz_con_encabezados(titulo, encabezados, matriz)
+    campo = orden_campos[col - 1]
+    try:
+        ordenar_registros_por_campo(registros, campo)
+    except KeyError:
+        print("No se pudo ordenar: falta alguna clave en un registro.")
+        return
+    print(f"\nOrden aplicado por «{rotulos[campo]}» ({campo}), ascendente.")
+    mostrar_registros_tabla(titulo, orden_campos, rotulos, registros)

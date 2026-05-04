@@ -13,7 +13,7 @@ def listar_usuarios(usuarios):
     print("ID | Nombre      | Apellido    | DNI")
     print("-" * 45)
     for u in usuarios:
-        print(f"{u[0]:2} | {u[1]:11} | {u[2]:11} | {u[3]}")
+        print(f"{u['id']:2} | {u['nombre']:11} | {u['apellido']:11} | {u['dni']}")
 
 
 def alta_usuario(usuarios):
@@ -24,7 +24,7 @@ def alta_usuario(usuarios):
         print("Error: todos los campos son obligatorios.")
         return usuarios
     nuevo_id = siguiente_id_usuario(usuarios)
-    usuarios.append([nuevo_id, nombre, apellido, dni])
+    usuarios.append({"id": nuevo_id, "nombre": nombre, "apellido": apellido, "dni": dni})
     print(f"Usuario dado de alta. ID asignado: {nuevo_id}")
     return usuarios
 
@@ -38,7 +38,7 @@ def consultar_usuario(usuarios):
     if u is None:
         print("No existe un usuario con ese ID.")
     else:
-        print(f"ID: {u[0]} | {u[1]} {u[2]} | DNI: {u[3]}")
+        print(f"ID: {u['id']} | {u['nombre']} {u['apellido']} | DNI: {u['dni']}")
 
 
 def modificar_usuario(usuarios):
@@ -51,15 +51,15 @@ def modificar_usuario(usuarios):
         print("No existe un usuario con ese ID.")
         return usuarios
     print("(Deje vacío para no cambiar el campo.)")
-    nombre = input(f"Nombre [{u[1]}]: ").strip()
-    apellido = input(f"Apellido [{u[2]}]: ").strip()
-    dni = input(f"DNI [{u[3]}]: ").strip()
+    nombre = input(f"Nombre [{u['nombre']}]: ").strip()
+    apellido = input(f"Apellido [{u['apellido']}]: ").strip()
+    dni = input(f"DNI [{u['dni']}]: ").strip()
     if nombre:
-        u[1] = nombre
+        u["nombre"] = nombre
     if apellido:
-        u[2] = apellido
+        u["apellido"] = apellido
     if dni:
-        u[3] = dni
+        u["dni"] = dni
     print("Usuario actualizado.")
     return usuarios
 
@@ -69,9 +69,9 @@ def baja_usuario(usuarios):
     if id_buscar is None:
         print("ID inválido.")
         return usuarios
-    for i, fila in enumerate(usuarios):
-        if fila[0] == id_buscar:
-            confirmar = input(f"¿Eliminar a {fila[1]} {fila[2]}? (s/n): ").strip().lower()
+    for i, u in enumerate(usuarios):
+        if u["id"] == id_buscar:
+            confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']}? (s/n): ").strip().lower()
             if confirmar == "s":
                 usuarios.pop(i)
                 print("Usuario eliminado.")
