@@ -48,10 +48,13 @@ def siguiente_id_usuario(usuarios):
 
 
 def buscar_usuario_por_id(usuarios, id_usuario):
-    for u in usuarios:
-        if u["id"] == id_usuario:
-            return u
-    return None
+    i = 0
+    encontrado = None
+    while i < len(usuarios) and encontrado is None:
+        if usuarios[i]["id"] == id_usuario:
+            encontrado = usuarios[i]
+        i += 1
+    return encontrado
 
 
 def tarifa_mensual_por_tipo(tipo):
@@ -69,20 +72,25 @@ def siguiente_id_vehiculo(vehiculos):
         return 1
     return max(v["id"] for v in vehiculos) + 1
 
-
 def buscar_vehiculo_por_patente(vehiculos, patente):
     p = patente.strip().upper()
-    for v in vehiculos:
-        if v["patente"].strip().upper() == p:
-            return v
-    return None
+    i = 0
+    encontrado = None
+    while i < len(vehiculos) and encontrado is None:
+        if vehiculos[i]["patente"].strip().upper() == p:
+            encontrado = vehiculos[i]
+        i += 1
+    return encontrado
 
 
 def buscar_vehiculo_por_id(vehiculos, id_vehiculo):
-    for v in vehiculos:
-        if v["id"] == id_vehiculo:
-            return v
-    return None
+    i = 0
+    encontrado = None
+    while i < len(vehiculos) and encontrado is None:
+        if vehiculos[i]["id"] == id_vehiculo:
+            encontrado = vehiculos[i]
+        i += 1
+    return encontrado
 
 
 def piso_para_tipo(tipo):
@@ -94,19 +102,24 @@ def piso_para_tipo(tipo):
         return PISO_CAMIONETAS
     return None
 
-
 def indice_cupo_piso_y_numero(estacionamiento, piso, nro_cupo):
-    for i, e in enumerate(estacionamiento):
-        if e["piso"] == piso and e["cupo"] == nro_cupo:
-            return i
-    return None
+    i = 0
+    indice_encontrado = None
+    while i < len(estacionamiento) and indice_encontrado is None:
+        if estacionamiento[i]["piso"] == piso and estacionamiento[i]["cupo"] == nro_cupo:
+            indice_encontrado = i
+        i += 1
+    return indice_encontrado
 
 
 def indice_cupo_por_id_vehiculo(estacionamiento, id_vehiculo):
-    for i, e in enumerate(estacionamiento):
-        if e["vehiculo"] == id_vehiculo:
-            return i
-    return None
+    i = 0
+    indice_encontrado = None
+    while i < len(estacionamiento) and indice_encontrado is None:
+        if estacionamiento[i]["vehiculo"] == id_vehiculo:
+            indice_encontrado = i
+        i += 1
+    return indice_encontrado
 
 
 def primer_cupo_libre_en_piso(estacionamiento, piso):
