@@ -1,6 +1,8 @@
 # ----------------------------------------------------------------------------------------------
 # CONSTANTES Y DATOS INICIALES (listas de diccionarios)
 # ----------------------------------------------------------------------------------------------
+import json
+
 CUPOS_POR_PISO = 5
 PISO_MOTOS = 1
 PISO_AUTOS = 2
@@ -12,12 +14,16 @@ TARIFA_MENSUAL_AUTO = 68000
 TARIFA_MENSUAL_CAMIONETA = 95000
 
 # usuarios: id, nombre, apellido, dni
-USUARIOS_INICIAL = [
-    {"id": 1, "nombre": "Ana", "apellido": "García", "dni": "28111222"},
-    {"id": 2, "nombre": "Luis", "apellido": "Rodríguez", "dni": "35111222"},
-    {"id": 3, "nombre": "María", "apellido": "Fernández", "dni": "40111222"},
-    {"id": 4, "nombre": "Pedro", "apellido": "López", "dni": "20999888"},
-]
+try:
+    with open('usuarios.json', 'r', encoding='utf-8') as f:
+        USUARIOS_INICIAL = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError, OSError):
+    USUARIOS_INICIAL = [
+        {"id": 1, "nombre": "Ana", "apellido": "García", "dni": "28111222"},
+        {"id": 2, "nombre": "Luis", "apellido": "Rodríguez", "dni": "35111222"},
+        {"id": 3, "nombre": "María", "apellido": "Fernández", "dni": "40111222"},
+        {"id": 4, "nombre": "Pedro", "apellido": "López", "dni": "20999888"},
+    ]
 
 # vehículos: id, patente, tipo, usuario (id del titular), tarifa
 VEHICULOS_INICIAL = [
