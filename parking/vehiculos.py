@@ -93,3 +93,24 @@ def baja_vehiculo(vehiculos, estacionamiento):
             break
     print("Vehículo eliminado.")
     return vehiculos, estacionamiento
+
+def modificar_vehiculo(vehiculos, usuarios):
+    id_buscar = cadena_a_entero(input("Ingrese ID de vehículo a modificar: "))
+    if id_buscar is None:
+        print("ID inválido.")
+        return vehiculos
+    
+    v = buscar_vehiculo_por_id(vehiculos, id_buscar)
+    if v is None:
+        print("No existe un vehículo con ese ID.")
+        return vehiculos
+    
+    patente = input(f"Patente [{v['patente']}]: ").strip().upper()
+    if patente and patente != v['patente']:
+        if buscar_vehiculo_por_patente(vehiculos, patente) is not None:
+            print("Error: ya existe otro vehículo con esa patente.")
+        else:
+            v["patente"] = patente
+            print("Patente actualizada.")
+            
+    return vehiculos
