@@ -98,7 +98,7 @@ def modificar_vehiculo(vehiculos, usuarios):
     id_buscar = cadena_a_entero(input("Ingrese ID de vehículo a modificar: "))
     if id_buscar is None:
         print("ID inválido.")
-        return vehiculos
+        return vehiculos    
     
     v = buscar_vehiculo_por_id(vehiculos, id_buscar)
     if v is None:
@@ -112,5 +112,25 @@ def modificar_vehiculo(vehiculos, usuarios):
         else:
             v["patente"] = patente
             print("Patente actualizada.")
+
+    print(f"Tipo actual: {v['tipo']}. [1] moto  [2] auto  [3] camioneta")
+    ingresar_tipo = input("Seleccione nuevo tipo (o deje vacío): ").strip()
+    if ingresar_tipo in ["1", "2", "3"]:
+        tipos = {"1": "moto", "2": "auto", "3": "camioneta"}
+        v["tipo"] = tipos[ingresar_tipo]
+        v["tarifa"] = tarifa_mensual_por_tipo(v["tipo"])
+        print("Tipo y tarifa actualizados.")
+
+    id_usr_txt = input(f"ID de nuevo titular [{v['usuario']}]: ").strip()
+    if id_usr_txt:
+        if id_usr_txt.isdigit():
+            nuevo_id_usr = int(id_usr_txt)
+            if buscar_usuario_por_id(usuarios, nuevo_id_usr) is not None:
+                v["usuario"] = nuevo_id_usr
+                print("Titular actualizado.")
+            else:
+                print("Error: El ID de usuario no existe.")
+        else:
+            print("Error: ID de usuario debe ser numérico.")
             
     return vehiculos
