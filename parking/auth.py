@@ -1,9 +1,14 @@
 import json
+import os
 
 
 def cargar_cuentas():
 
-    with open("parking/cuentas.json", "r", encoding="utf-8") as archivo:
+    ruta_base = os.path.dirname(__file__)
+
+    ruta_cuentas = os.path.join(ruta_base, "cuentas.json")
+
+    with open(ruta_cuentas, "r", encoding="utf-8") as archivo:
         return json.load(archivo)
 
 
