@@ -2,8 +2,10 @@ from parking.utilidades import (
     buscar_usuario_por_id,
     cadena_a_entero,
     siguiente_id_usuario,
+    normalizar_texto,
+    validar_dni,
+    validar_nombre_o_apellido,
 )
-
 
 def listar_usuarios(usuarios):
     if not usuarios:
@@ -23,8 +25,25 @@ def alta_usuario(usuarios):
     if not nombre or not apellido or not dni:
         print("Error: todos los campos son obligatorios.")
         return usuarios
+    if not validar_nombre_o_apellido(nombre):
+        print("Error: el nombre debe contener solo letras y tener entre 2 y 30 caracteres.")
+        return usuarios
+    if not validar_nombre_o_apellido(apellido):
+        print("Error: el apellido debe contener solo letras y tener entre 2 y 30 caracteres.")
+        return usuarios
+    if not validar_dni(dni):
+        print("Error: el DNI debe tener 7 u 8 números.")
+        return usuarios
+    nombre = normalizar_texto(nombre)
+    apellido = normalizar_texto(apellido)
+    dni = dni.strip()
     nuevo_id = siguiente_id_usuario(usuarios)
-    usuarios.append({"id": nuevo_id, "nombre": nombre, "apellido": apellido, "dni": dni})
+    usuarios.append({
+        "id": nuevo_id,
+        "nombre": nombre,
+        "apellido": apellido,
+        "dni": dni
+    })
     print(f"Usuario dado de alta. ID asignado: {nuevo_id}")
     return usuarios
 
@@ -55,14 +74,22 @@ def modificar_usuario(usuarios):
     apellido = input(f"Apellido [{u['apellido']}]: ").strip()
     dni = input(f"DNI [{u['dni']}]: ").strip()
     if nombre:
-        u["nombre"] = nombre
+        if validar_nombre_o_apellido(nombre):
+            u["nombre"] = normalizar_texto(nombre)
+        else:
+            print("Nombre inválido. No se modificó.")
     if apellido:
-        u["apellido"] = apellido
+        if validar_nombre_o_apellido(apellido):
+            u["apellido"] = normalizar_texto(apellido)
+        else:
+            print("Apellido inválido. No se modificó.")
     if dni:
-        u["dni"] = dni
+        if validar_dni(dni):
+            u["dni"] = dni.strip()
+        else:
+            print("DNI inválido. No se modificó.")
     print("Usuario actualizado.")
     return usuarios
-
 
 def baja_usuario(usuarios):
     id_buscar = cadena_a_entero(input("Ingrese ID de usuario a eliminar: "))

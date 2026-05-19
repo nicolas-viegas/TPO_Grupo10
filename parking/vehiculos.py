@@ -1,11 +1,11 @@
 from parking.utilidades import (
     buscar_usuario_por_id,
-    buscar_vehiculo_por_id,
     buscar_vehiculo_por_patente,
     cadena_a_entero,
-    indice_cupo_por_id_vehiculo,
     siguiente_id_vehiculo,
     tarifa_mensual_por_tipo,
+    validar_patente,
+    formatear_patente,
 )
 
 
@@ -29,10 +29,13 @@ def alta_vehiculo(vehiculos, usuarios):
     if not patente:
         print("Error: la patente es obligatoria.")
         return vehiculos
+    if not validar_patente(patente):
+        print("Error: patente inválida. Use formato AB123CD o ABC123.")
+        return vehiculos
+    patente = formatear_patente(patente).replace("-", "")
     if buscar_vehiculo_por_patente(vehiculos, patente) is not None:
         print("Error: ya existe un vehículo con esa patente.")
         return vehiculos
-
     print("Tipo: [1] moto  [2] auto  [3] camioneta")
     ingresar_tipo = input("Seleccione tipo: ").strip()
     if ingresar_tipo == "1":
@@ -44,7 +47,6 @@ def alta_vehiculo(vehiculos, usuarios):
     else:
         print("Error: tipo inválido.")
         return vehiculos
-
     id_usuario = cadena_a_entero(input("ID de usuario (titular): "))
     if id_usuario is None:
         print("Error: ID de usuario inválido.")
@@ -52,7 +54,6 @@ def alta_vehiculo(vehiculos, usuarios):
     if buscar_usuario_por_id(usuarios, id_usuario) is None:
         print("Error: no existe un usuario con ese ID.")
         return vehiculos
-
     tarifa = tarifa_mensual_por_tipo(tipo)
     nuevo_id = siguiente_id_vehiculo(vehiculos)
     vehiculos.append(
