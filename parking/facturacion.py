@@ -4,7 +4,7 @@ Reportes y simulaciones sobre los registros (map, filter, etc.).
 - map: transformar valores (ej. tarifa con descuento).
 - filter: quedarse con filas que cumplen una condición.
 """
-
+from functools import reduce
 from parking import archivos
 from parking.constantes import CUPOS_POR_PISO
 from parking.utilidades import cadena_a_entero, division_segura, promedio_lista_numeros
@@ -17,6 +17,25 @@ def _tarifa_con_descuento(tarifa, porcentaje_descuento):
         return aplicar(tarifa, porcentaje_descuento)
     except TypeError:
         return 0
+
+def mostrar_recaudacion_total_reduce(vehiculos):
+    """
+    Calcula la recaudación mensual total usando reduce().
+    """
+    if not vehiculos:
+        print("No hay vehículos.")
+        return
+    try:
+        total = reduce(
+            lambda acumulado, v: acumulado + v["tarifa"],
+            vehiculos,
+            0
+        )
+    except (KeyError, TypeError):
+        print("No se pudo calcular la recaudación total.")
+        return
+    print()
+    print(f"Recaudación mensual total usando reduce(): ${total}")
 
 
 def mostrar_tarifas_con_descuento(vehiculos):
@@ -136,12 +155,14 @@ def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_li
         print("[5] Promedio de tarifa mensual (división segura)")
         print("[6] Exportar datos a archivo JSON")
         print("[7] Importar datos desde archivo JSON")
+        print("[8] Recaudación mensual total (reduce)")
         print("---------------------------")
         print("[0] Volver al menú principal")
         print("---------------------------")
         print()
 
         sub = input("Seleccione una opción: ").strip()
+
         if sub == "0":
             break
         elif sub == "1":
@@ -159,7 +180,10 @@ def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_li
             if not ruta:
                 print("Debe indicar una ruta.")
             elif archivos.exportar_matrices_json(
-                ruta, usuarios_list, vehiculos_list, estacionamiento_list
+                ruta,
+                usuarios_list,
+                vehiculos_list,
+                estacionamiento_list
             ):
                 print("Exportación finalizada correctamente.")
         elif sub == "7":
@@ -170,11 +194,13 @@ def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_li
                 datos = archivos.importar_matrices_json(ruta)
                 if datos is not None:
                     u, v, e = datos
+
                     usuarios_list[:] = [dict(reg) for reg in u]
                     vehiculos_list[:] = [dict(reg) for reg in v]
                     estacionamiento_list[:] = [dict(reg) for reg in e]
                     print("Datos actualizados desde el archivo.")
+        elif sub == "8":
+            mostrar_recaudacion_total_reduce(vehiculos_list)
         else:
             print("Opción inválida.")
-
         input("\nPresione ENTER para continuar.")
