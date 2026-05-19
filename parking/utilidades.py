@@ -1,3 +1,6 @@
+import re
+from functools import reduc
+
 from parking.constantes import (
     CUPOS_POR_PISO,
     PISO_AUTOS,
@@ -128,3 +131,60 @@ def primer_cupo_libre_en_piso(estacionamiento, piso):
         if n not in ocupados:
             return n
     return None
+
+def normalizar_texto(texto):
+    """
+    Normaliza entradas de texto:
+    - strip(): elimina espacios al inicio/final
+    - lower(): compara en minúsculas
+    - title(): capitaliza nombres/apellidos
+    """
+    return texto.strip().lower().title()
+
+
+def formatear_patente(patente):
+    """
+    Normaliza patente:
+    - strip(): elimina espacios
+    - upper(): convierte a mayúsculas
+    - slicing: separa partes de la patente para mostrarla formateada
+    """
+    patente = patente.strip().upper()
+
+    if len(patente) == 7:
+        return patente[:2] + "-" + patente[2:5] + "-" + patente[5:]
+
+    if len(patente) == 6:
+        return patente[:3] + "-" + patente[3:]
+
+    return patente
+
+    def validar_dni(dni):
+    """
+    Valida DNI argentino: solo números, entre 7 y 8 dígitos.
+    Usa regex con metacaracteres y cuantificadores.
+    """
+    patron = r"^\d{7,8}$"
+    return re.fullmatch(patron, dni.strip()) is not None
+
+
+def validar_patente(patente):
+    """
+    Valida patente argentina:
+    - Formato nuevo: AB123CD
+    - Formato viejo: ABC123
+    Usa regex con grupos, clases y cuantificadores.
+    """
+    patente = patente.strip().upper()
+    patron_nuevo = r"^[A-Z]{2}\d{3}[A-Z]{2}$"
+    patron_viejo = r"^[A-Z]{3}\d{3}$"
+    return re.fullmatch(patron_nuevo, patente) is not None or re.fullmatch(patron_viejo, patente) is not None
+
+
+def validar_nombre_o_apellido(texto):
+    """
+    Valida que nombre/apellido tenga solo letras y espacios.
+    Permite acentos y ñ.
+    """
+    patron = r"^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,30}$"
+    return re.fullmatch(patron, texto.strip()) is not None
