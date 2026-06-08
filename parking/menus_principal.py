@@ -126,7 +126,7 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
                 elif sub == "1":
                     vehiculos.alta_vehiculo(lista_vehiculos, lista_usuarios)
                 elif sub == "2":
-                    vehiculos.listar_vehiculos(lista_vehiculos)
+                    vehiculos.listar_vehiculos(lista_vehiculos, lista_usuarios)
                 elif sub == "3":
                     vehiculos.modificar_vehiculo(lista_vehiculos, lista_usuarios)
                 elif sub == "4":
@@ -178,7 +178,7 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
             print("\n--- USUARIOS ---")
             usuarios.listar_usuarios(lista_usuarios)
             print("\n--- VEHÍCULOS ---")
-            vehiculos.listar_vehiculos(lista_vehiculos)
+            vehiculos.listar_vehiculos(lista_vehiculos, lista_usuarios)
             print("\n--- ESTACIONAMIENTO (ocupados) ---")
             gestion_cupos.listar_estacionamiento(lista_estacionamiento)
 
@@ -221,7 +221,7 @@ def _menu_cliente(
             return
 
         elif opcion == "1":
-            vehiculos.listar_vehiculos(lista_vehiculos)
+            vehiculos.listar_vehiculos(lista_vehiculos,lista_usuarios)
 
         elif opcion == "2":
             gestion_cupos.consultar_cupo(

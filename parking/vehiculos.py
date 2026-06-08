@@ -9,18 +9,29 @@ from parking.utilidades import (
 )
 
 
-def listar_vehiculos(vehiculos):
+def listar_vehiculos(vehiculos, usuarios):
     if not vehiculos:
         print("No hay vehículos cargados.")
         return
     print()
-    print("ID veh. | Patente   | Tipo      | ID usr | $ mensual")
-    print("-" * 55)
+    # Ajustamos el ancho para que entre el nombre del titular
+    print("ID veh. | Patente   | Tipo      | Titular (ID - Nombre)          | $ mensual")
+    print("-" * 80)
     for v in vehiculos:
         tarifa = v.get("tarifa", "-")
+
+        u = buscar_usuario_por_id(usuarios, v["usuario"])
+        if u is not None:
+            nombre_titular = f"{u['id']} - {u['nombre']} {u['apellido']}"
+        else:
+            nombre_titular = f"{v['usuario']} - (Desconocido)"
+            
+        # para que la tabla no se descuadre lo cortamos
+        nombre_titular = nombre_titular[:28]
+        
         print(
             f"{v['id']:7} | {v['patente']:9} | {v['tipo']:9} | "
-            f"{v['usuario']:6} | {tarifa!s:>9}"
+            f"{nombre_titular:30} | {tarifa!s:>9}"
         )
 
 
