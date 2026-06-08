@@ -1,5 +1,4 @@
 import re
-from functools import reduc
 
 from parking.constantes import (
     CUPOS_POR_PISO,
@@ -159,11 +158,7 @@ def formatear_patente(patente):
 
     return patente
 
-    def validar_dni(dni):
-    """
-    Valida DNI argentino: solo números, entre 7 y 8 dígitos.
-    Usa regex con metacaracteres y cuantificadores.
-    """
+def validar_dni(dni):
     patron = r"^\d{7,8}$"
     return re.fullmatch(patron, dni.strip()) is not None
 

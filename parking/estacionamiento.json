@@ -1,0 +1,7 @@
+[
+    {"piso": 1, "cupo": 1, "vehiculo": 1},
+    {"piso": 1, "cupo": 2, "vehiculo": 4},
+    {"piso": 2, "cupo": 1, "vehiculo": 2},
+    {"piso": 2, "cupo": 3, "vehiculo": 5},
+    {"piso": 3, "cupo": 4, "vehiculo": 3}
+]

@@ -110,40 +110,32 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
 
         elif opcion == "2":
             while True:
-                while True:
-                    sub_opciones = 3
-                    print()
-                    print("---------------------------")
-                    print("MENÚ PRINCIPAL > VEHÍCULOS")
-                    print("---------------------------")
-                    print("[1] Alta de vehículo")
-                    print("[2] Listar vehículos")
-                    print("[3] Baja de vehículo")
-                    print("---------------------------")
-                    print("[0] Volver al menú anterior")
-                    print("---------------------------")
-                    print()
-
-                    sub = input("Seleccione una opción: ")
-                    if sub in [str(i) for i in range(0, sub_opciones + 1)]:
-                        break
-                    input("Opción inválida. Presione ENTER para volver a seleccionar.")
-                print()
+                print("\n---------------------------")
+                print("MENÚ PRINCIPAL > VEHÍCULOS")
+                print("---------------------------")
+                print("[1] Alta de vehículo")
+                print("[2] Listar vehículos")
+                print("[3] Modificar vehículo") # Nueva opción
+                print("[4] Baja de vehículo")
+                print("[0] Volver al menú anterior")
+                
+                sub = input("\nSeleccione una opción: ").strip()
 
                 if sub == "0":
                     break
-                if sub == "1":
+                elif sub == "1":
                     vehiculos.alta_vehiculo(lista_vehiculos, lista_usuarios)
                 elif sub == "2":
                     vehiculos.listar_vehiculos(lista_vehiculos)
                 elif sub == "3":
-
-                    vehiculos.baja_vehiculo(
-                        lista_vehiculos,
-                        lista_estacionamiento
-                     )
-
-                input("\nPresione ENTER para continuar.")
+                    vehiculos.modificar_vehiculo(lista_vehiculos, lista_usuarios)
+                elif sub == "4":
+                    vehiculos.baja_vehiculo(lista_vehiculos, lista_estacionamiento)
+                else:
+                    print("Opción inválida.")
+                
+                if sub != "0":
+                    input("\nPresione ENTER para continuar.")
 
         elif opcion == "3":
             while True:

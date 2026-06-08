@@ -95,6 +95,16 @@ def baja_vehiculo(vehiculos, estacionamiento):
     print("Vehículo eliminado.")
     return vehiculos, estacionamiento
 
+
+def buscar_vehiculo_por_id(vehiculos, id_vehiculo):
+    i = 0
+    encontrado = None
+    while i < len(vehiculos) and encontrado is None:
+        if vehiculos[i]["id"] == id_vehiculo:
+            encontrado = vehiculos[i]
+        i += 1
+    return encontrado
+
 def modificar_vehiculo(vehiculos, usuarios):
     id_buscar = cadena_a_entero(input("Ingrese ID de vehículo a modificar: "))
     if id_buscar is None:
