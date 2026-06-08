@@ -10,22 +10,41 @@ from parking import usuarios
 from parking import vehiculos
 
 
-def ejecutar_aplicacion():
+def ejecutar_aplicacion(usuario_logueado):
     lista_usuarios = [dict(u) for u in USUARIOS_INICIAL]
     lista_vehiculos = [dict(v) for v in VEHICULOS_INICIAL]
     lista_estacionamiento = [dict(e) for e in ESTACIONAMIENTO_INICIAL]
 
     try:
-        _bucle_principal(lista_usuarios, lista_vehiculos, lista_estacionamiento)
+         if usuario_logueado["rol"] == "operador":
+
+            _bucle_operador(
+            lista_usuarios,
+            lista_vehiculos,
+            lista_estacionamiento,
+            usuario_logueado
+        )
+
+         elif usuario_logueado["rol"] == "cliente":
+
+          _menu_cliente(
+            lista_usuarios,
+            lista_vehiculos,
+            lista_estacionamiento,
+            usuario_logueado
+        )
+
     except KeyboardInterrupt:
         print("\n\nPrograma interrumpido por el usuario (Ctrl+C). Fin.")
 
 
-def _bucle_principal(lista_usuarios, lista_vehiculos, lista_estacionamiento):
+def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usuario_logueado):
     while True:
         while True:
             opciones = 6
             print()
+            print(f"\nUsuario: {usuario_logueado['usuario']}")
+            print(f"Rol: {usuario_logueado['rol']}")
             print("---------------------------")
             print("MENÚ PRINCIPAL")
             print("---------------------------")
@@ -118,7 +137,11 @@ def _bucle_principal(lista_usuarios, lista_vehiculos, lista_estacionamiento):
                 elif sub == "2":
                     vehiculos.listar_vehiculos(lista_vehiculos)
                 elif sub == "3":
-                    vehiculos.baja_vehiculo(lista_vehiculos, lista_estacionamiento)
+
+                    vehiculos.baja_vehiculo(
+                        lista_vehiculos,
+                        lista_estacionamiento
+                     )
 
                 input("\nPresione ENTER para continuar.")
 
@@ -177,3 +200,44 @@ def _bucle_principal(lista_usuarios, lista_vehiculos, lista_estacionamiento):
 
         input("\nPresione ENTER para volver al menú.")
         print("\n\n")
+
+def _menu_cliente(
+    lista_usuarios,
+    lista_vehiculos,
+    lista_estacionamiento,
+    usuario_logueado
+):
+
+    while True:
+
+        print()
+        print(f"\nUsuario: {usuario_logueado['usuario']}")
+        print(f"Rol: {usuario_logueado['rol']}")
+        print("---------------------------")
+        print("MENÚ CLIENTE")
+        print("---------------------------")
+        print("[1] Ver vehículos")
+        print("[2] Consultar cupo")
+        print("---------------------------")
+        print("[0] Salir")
+        print("---------------------------")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "0":
+            print("Fin del programa.")
+            return
+
+        elif opcion == "1":
+            vehiculos.listar_vehiculos(lista_vehiculos)
+
+        elif opcion == "2":
+            gestion_cupos.consultar_cupo(
+                lista_estacionamiento,
+                lista_vehiculos
+            )
+
+        else:
+            print("Opción inválida.")
+
+        input("\nPresione ENTER para continuar.")
