@@ -145,14 +145,13 @@ def modificar_vehiculo(vehiculos, usuarios):
 
     id_usr_txt = input(f"ID de nuevo titular [{v['usuario']}]: ").strip()
     if id_usr_txt:
-        if id_usr_txt.isdigit():
+        try:
             nuevo_id_usr = int(id_usr_txt)
             if buscar_usuario_por_id(usuarios, nuevo_id_usr) is not None:
                 v["usuario"] = nuevo_id_usr
                 print("Titular actualizado.")
             else:
                 print("Error: El ID de usuario no existe.")
-        else:
-            print("Error: ID de usuario debe ser numérico.")
-            
+        except ValueError:
+            print("Error: El ID de usuario debe ser un número entero válido.")
     return vehiculos

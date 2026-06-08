@@ -34,9 +34,33 @@ def division_segura(numerador, denominador):
     except ZeroDivisionError:
         return None
 
+def solicitar_entero_seguro(mensaje):
+    """Garantiza de forma iterativa que el usuario ingrese un número entero válido."""
+    while True:
+        valor = input(mensaje)
+        try:
+            num = int(valor)
+            return num
+        except ValueError:
+            print("Error: se esperaba que ingrese un número entero.")
+            print("Vuelva a ingresarlo")
+
+
+def solicitar_float_seguro(mensaje):
+    """Garantiza de forma iterativa que el usuario ingrese un número decimal válido (Diapositiva 29)."""
+    while True:
+        valor = input(mensaje)
+        try:
+            num = float(valor)
+            return num
+        except ValueError:
+            print("Ha ocurrido un error! Por favor, ingrese un número válido.")
+
 
 def promedio_lista_numeros(valores):
-    """Promedio de una lista; None si la lista está vacía (incluye protección por ZeroDivisionError)."""
+    """Promedio de una lista utilizando control de precondiciones mediante raise ValueError."""
+    if not valores:
+        raise ValueError("La lista para calcular el promedio no debe estar vacía")
     try:
         return sum(valores) / len(valores)
     except ZeroDivisionError:

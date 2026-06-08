@@ -28,17 +28,17 @@ from parking.menus_principal import ejecutar_aplicacion
 
 
 def main():
+    try:
+        while True:
+            usuario_logueado = iniciar_sesion()
 
-    while True:
-
-        usuario_logueado = iniciar_sesion()
-
-        if usuario_logueado:
-            ejecutar_aplicacion(usuario_logueado)
-            break
-
-        else:
-            print("\nAcceso denegado. Intente nuevamente.\n")
+            if usuario_logueado:
+                ejecutar_aplicacion(usuario_logueado)
+                break
+            else:
+                print("\nAcceso denegado. Intente nuevamente.\n")
+    except KeyboardInterrupt:
+        print("\n\nInicio de sesión cancelado por el usuario. Saliendo del sistema.")
 
 
 if __name__ == "__main__":

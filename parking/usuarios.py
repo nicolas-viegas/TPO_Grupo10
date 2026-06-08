@@ -49,15 +49,18 @@ def alta_usuario(usuarios):
 
 
 def consultar_usuario(usuarios):
-    id_buscar = cadena_a_entero(input("Ingrese ID de usuario: "))
-    if id_buscar is None:
-        print("ID inválido.")
-        return
-    u = buscar_usuario_por_id(usuarios, id_buscar)
-    if u is None:
-        print("No existe un usuario con ese ID.")
-    else:
-        print(f"ID: {u['id']} | {u['nombre']} {u['apellido']} | DNI: {u['dni']}")
+    try:
+        id_buscar = cadena_a_entero(input("Ingrese ID de usuario: "))
+        if id_buscar is None:
+            print("ID inválido.")
+            return
+        u = buscar_usuario_por_id(usuarios, id_buscar)
+        if u is None:
+            print("No existe un usuario con ese ID.")
+        else:
+            print(f"ID: {u['id']} | {u['nombre']} {u['apellido']} | DNI: {u['dni']}")
+    except Exception as exc:
+        print(f"Error inesperado al consultar usuario: {exc}")]}")
 
 
 def modificar_usuario(usuarios):
@@ -91,19 +94,23 @@ def modificar_usuario(usuarios):
     print("Usuario actualizado.")
     return usuarios
 
+
 def baja_usuario(usuarios):
-    id_buscar = cadena_a_entero(input("Ingrese ID de usuario a eliminar: "))
-    if id_buscar is None:
-        print("ID inválido.")
-        return usuarios
-    for i, u in enumerate(usuarios):
-        if u["id"] == id_buscar:
-            confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']}? (s/n): ").strip().lower()
-            if confirmar == "s":
-                usuarios.pop(i)
-                print("Usuario eliminado.")
-            else:
-                print("Operación cancelada.")
+    try:
+        id_buscar = cadena_a_entero(input("Ingrese ID de usuario a eliminar: "))
+        if id_buscar is None:
+            print("ID inválido.")
             return usuarios
-    print("No existe un usuario con ese ID.")
+        for i, u in enumerate(usuarios):
+            if u["id"] == id_buscar:
+                confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']}? (s/n): ").strip().lower()
+                if confirmar == "s":
+                    usuarios.pop(i)
+                    print("Usuario eliminado.")
+                else:
+                    print("Operación cancelada.")
+                return usuarios
+        print("No existe un usuario con ese ID.")
+    except Exception as exc:
+        print(f"Error inesperado en la baja de usuario: {exc}")
     return usuarios

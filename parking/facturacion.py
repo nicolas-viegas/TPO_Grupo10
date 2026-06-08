@@ -108,21 +108,17 @@ def mostrar_ocupacion_por_piso(estacionamiento):
 
 
 def mostrar_promedio_tarifa_mensual(vehiculos):
-    """Usa promedio_lista_numeros (manejo explícito de división por cero si la lista estuviera vacía)."""
-    if not vehiculos:
-        print("No hay vehículos.")
-        return
+    """Usa promedio_lista_numeros controlando la precondición de lista vacía."""
     try:
         tarifas = [v["tarifa"] for v in vehiculos]
-    except (KeyError, TypeError):
-        print("No se pudieron leer las tarifas del listado de vehículos.")
-        return
-    promedio = promedio_lista_numeros(tarifas)
-    if promedio is None:
-        print("No se puede calcular el promedio (sin datos válidos).")
-        return
-    print()
-    print(f"Promedio de tarifa mensual (todos los vehículos): ${promedio:.0f}")
+        promedio = promedio_lista_numeros(tarifas)
+        if promedio is None:
+            print("No se puede calcular el promedio.")
+            return
+        print()
+        print(f"Promedio de tarifa mensual (todos los vehículos): ${promedio:.0f}")
+    except ValueError as val_err:
+        print(f"Aviso de Validación académica: {val_err}")
 
 
 def mostrar_cupos_en_piso(estacionamiento):
