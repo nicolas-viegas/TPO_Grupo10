@@ -59,39 +59,42 @@ def consultar_usuario(usuarios):
             print("No existe un usuario con ese ID.")
         else:
             print(f"ID: {u['id']} | {u['nombre']} {u['apellido']} | DNI: {u['dni']}")
-    except Exception as exc:
-        print(f"Error inesperado al consultar usuario: {exc}")]}")
+    except Exception:
+        print("Error inesperado al consultar usuario.")
 
 
 def modificar_usuario(usuarios):
-    id_buscar = cadena_a_entero(input("Ingrese ID de usuario a modificar: "))
-    if id_buscar is None:
-        print("ID inválido.")
-        return usuarios
-    u = buscar_usuario_por_id(usuarios, id_buscar)
-    if u is None:
-        print("No existe un usuario con ese ID.")
-        return usuarios
-    print("(Deje vacío para no cambiar el campo.)")
-    nombre = input(f"Nombre [{u['nombre']}]: ").strip()
-    apellido = input(f"Apellido [{u['apellido']}]: ").strip()
-    dni = input(f"DNI [{u['dni']}]: ").strip()
-    if nombre:
-        if validar_nombre_o_apellido(nombre):
-            u["nombre"] = normalizar_texto(nombre)
-        else:
-            print("Nombre inválido. No se modificó.")
-    if apellido:
-        if validar_nombre_o_apellido(apellido):
-            u["apellido"] = normalizar_texto(apellido)
-        else:
-            print("Apellido inválido. No se modificó.")
-    if dni:
-        if validar_dni(dni):
-            u["dni"] = dni.strip()
-        else:
-            print("DNI inválido. No se modificó.")
-    print("Usuario actualizado.")
+    try:
+        id_buscar = cadena_a_entero(input("Ingrese ID de usuario a modificar: "))
+        if id_buscar is None:
+            print("ID inválido.")
+            return usuarios
+        u = buscar_usuario_por_id(usuarios, id_buscar)
+        if u is None:
+            print("No existe un usuario con ese ID.")
+            return usuarios
+        print("(Deje vacío para no cambiar el campo.)")
+        nombre = input(f"Nombre [{u['nombre']}]: ").strip()
+        apellido = input(f"Apellido [{u['apellido']}]: ").strip()
+        dni = input(f"DNI [{u['dni']}]: ").strip()
+        if nombre:
+            if validar_nombre_o_apellido(nombre):
+                u["nombre"] = normalizar_texto(nombre)
+            else:
+                print("Nombre inválido. No se modificó.")
+        if apellido:
+            if validar_nombre_o_apellido(apellido):
+                u["apellido"] = normalizar_texto(apellido)
+            else:
+                print("Apellido inválido. No se modificó.")
+        if dni:
+            if validar_dni(dni):
+                u["dni"] = dni.strip()
+            else:
+                print("DNI inválido. No se modificó.")
+        print("Usuario actualizado.")
+    except Exception:
+        print("Error inesperado al modificar usuario.")
     return usuarios
 
 
@@ -111,6 +114,6 @@ def baja_usuario(usuarios):
                     print("Operación cancelada.")
                 return usuarios
         print("No existe un usuario con ese ID.")
-    except Exception as exc:
-        print(f"Error inesperado en la baja de usuario: {exc}")
+    except Exception:
+        print("Error inesperado en la baja de usuario.")
     return usuarios
