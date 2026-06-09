@@ -137,6 +137,80 @@ def mostrar_cupos_en_piso(estacionamiento):
     for e in sorted(filas, key=lambda x: x["cupo"]):
         print(f"{e['cupo']:8} | {e['vehiculo']}")
 
+        
+def mostrar_resumen_estadistico(usuarios, vehiculos, estacionamiento):
+    print()
+    print("---------------------------")
+    print("RESUMEN ESTADÍSTICO GENERAL")
+    print("---------------------------")
+
+    total_usuarios = len(usuarios)
+    total_vehiculos = len(vehiculos)
+    total_cupos_ocupados = len(estacionamiento)
+    total_cupos_disponibles = 3 * CUPOS_POR_PISO
+
+    print(f"Total de usuarios registrados: {total_usuarios}")
+    print(f"Total de vehículos registrados: {total_vehiculos}")
+    print(f"Total de cupos ocupados: {total_cupos_ocupados}")
+    print(f"Total de cupos disponibles: {total_cupos_disponibles}")
+
+    print()
+    print("Vehículos por tipo:")
+    tipos = {}
+
+    for v in vehiculos:
+        tipo = v.get("tipo", "sin tipo")
+        tipos[tipo] = tipos.get(tipo, 0) + 1
+
+    for tipo, cantidad in tipos.items():
+        porcentaje = division_segura(cantidad, total_vehiculos)
+        porcentaje = porcentaje * 100 if porcentaje is not None else 0
+        print(f"- {tipo}: {cantidad} vehículo/s ({porcentaje:.2f}%)")
+
+    print()
+    print("Promedios de tarifas:")
+    tarifas = [v["tarifa"] for v in vehiculos if "tarifa" in v]
+
+    promedio_general = promedio_lista_numeros(tarifas)
+    if promedio_general is not None:
+        print(f"Promedio general de tarifa mensual: ${promedio_general:.2f}")
+        print(f"Tarifa máxima registrada: ${max(tarifas)}")
+        print(f"Tarifa mínima registrada: ${min(tarifas)}")
+    else:
+        print("No hay tarifas cargadas.")
+
+    print()
+    print("Promedio de tarifa por tipo:")
+    for tipo in tipos:
+        tarifas_tipo = [
+            v["tarifa"]
+            for v in vehiculos
+            if v.get("tipo") == tipo and "tarifa" in v
+        ]
+
+        promedio_tipo = promedio_lista_numeros(tarifas_tipo)
+        if promedio_tipo is not None:
+            print(f"- {tipo}: ${promedio_tipo:.2f}")
+
+    print()
+    print("Ocupación por piso:")
+    for piso in (1, 2, 3):
+        ocupados = sum(1 for e in estacionamiento if e["piso"] == piso)
+        libres = CUPOS_POR_PISO - ocupados
+        porcentaje_ocupacion = division_segura(ocupados, CUPOS_POR_PISO)
+        porcentaje_ocupacion = porcentaje_ocupacion * 100 if porcentaje_ocupacion is not None else 0
+
+        print(
+            f"Piso {piso}: {ocupados} ocupados, "
+            f"{libres} libres ({porcentaje_ocupacion:.2f}% ocupado)"
+        )
+
+    print()
+    print("Resumen simple:")
+    porcentaje_global = division_segura(total_cupos_ocupados, total_cupos_disponibles)
+    porcentaje_global = porcentaje_global * 100 if porcentaje_global is not None else 0
+
+    print(f"Ocupación global: {porcentaje_global:.2f}%")
 
 def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_list):
     while True:
