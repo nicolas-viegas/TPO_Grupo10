@@ -137,7 +137,7 @@ def mostrar_cupos_en_piso(estacionamiento):
     for e in sorted(filas, key=lambda x: x["cupo"]):
         print(f"{e['cupo']:8} | {e['vehiculo']}")
 
-        
+
 def mostrar_resumen_estadistico(usuarios, vehiculos, estacionamiento):
     print()
     print("---------------------------")
@@ -226,6 +226,7 @@ def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_li
         print("[6] Exportar datos a archivo JSON")
         print("[7] Importar datos desde archivo JSON")
         print("[8] Recaudación mensual total (reduce)")
+        print("[9] Resumen estadístico completo")
         print("---------------------------")
         print("[0] Volver al menú principal")
         print("---------------------------")
@@ -271,6 +272,8 @@ def menu_facturacion_y_lambdas(usuarios_list, vehiculos_list, estacionamiento_li
                     print("Datos actualizados desde el archivo.")
         elif sub == "8":
             mostrar_recaudacion_total_reduce(vehiculos_list)
+        elif sub == "9":
+            mostrar_resumen_estadistico_completo(vehiculos_list)
         else:
             print("Opción inválida.")
         input("\nPresione ENTER para continuar.")
