@@ -115,8 +115,10 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
                 print("---------------------------")
                 print("[1] Alta de vehículo")
                 print("[2] Listar vehículos")
-                print("[3] Modificar vehículo") # Nueva opción
+                print("[3] Modificar vehículo") 
                 print("[4] Baja de vehículo")
+                print("[5] Consultar vehículos de un usuario")
+                print("---------------------------")
                 print("[0] Volver al menú anterior")
                 
                 sub = input("\nSeleccione una opción: ").strip()
@@ -131,6 +133,8 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
                     vehiculos.modificar_vehiculo(lista_vehiculos, lista_usuarios)
                 elif sub == "4":
                     vehiculos.baja_vehiculo(lista_vehiculos, lista_estacionamiento)
+                elif sub == "5":
+                    vehiculos.consultar_vehiculos_de_usuario(lista_vehiculos, lista_usuarios)
                 else:
                     print("Opción inválida.")
                 

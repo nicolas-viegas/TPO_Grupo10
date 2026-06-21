@@ -19,9 +19,8 @@ def _tarifa_con_descuento(tarifa, porcentaje_descuento):
         return 0
 
 def mostrar_recaudacion_total_reduce(vehiculos):
-    """
-    Calcula la recaudación mensual total usando reduce().
-    """
+    #Calcula la recaudación mensual total usando reduce().
+   
     if not vehiculos:
         print("No hay vehículos.")
         return

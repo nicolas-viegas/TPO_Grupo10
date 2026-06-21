@@ -155,3 +155,31 @@ def modificar_vehiculo(vehiculos, usuarios):
         except ValueError:
             print("Error: El ID de usuario debe ser un número entero válido.")
     return vehiculos
+
+
+def consultar_vehiculos_de_usuario(vehiculos, usuarios):
+    id_usuario = cadena_a_entero(input("Ingrese ID de usuario para ver sus vehículos: "))
+    if id_usuario is None:
+        print("ID inválido.")
+        return
+    
+    u = buscar_usuario_por_id(usuarios, id_usuario)
+    if u is None:
+        print("No existe un usuario con ese ID.")
+        return
+    
+    print(f"\nVehículos registrados a nombre de: {u['nombre']} {u['apellido']} (ID: {u['id']})")
+    print("-" * 60)
+    
+    encontrados = 0
+    # Usamos búsqueda secuencial pura (while) como pide la cátedra
+    i = 0
+    while i < len(vehiculos):
+        v = vehiculos[i]
+        if v["usuario"] == id_usuario:
+            print(f" - ID Vehículo: {v['id']:3} | Patente: {v['patente']:9} | Tipo: {v['tipo']}")
+            encontrados += 1
+        i += 1
+        
+    if encontrados == 0:
+        print("Este usuario no tiene vehículos registrados.")
