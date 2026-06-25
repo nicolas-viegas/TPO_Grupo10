@@ -1,3 +1,4 @@
+from parking.archivos import guardar_lista_json
 from parking.constantes import CUPOS_POR_PISO
 from parking.utilidades import (
     buscar_vehiculo_por_id,
@@ -45,6 +46,9 @@ def asignar_cupo(vehiculos, estacionamiento):
         f"Vehículo tipo «{v['tipo']}» → piso {piso}. "
         f"Cupo asignado automáticamente: lugar {nro} (vehículo ID {id_v})."
     )
+
+    guardar_lista_json("estacionamiento.json", estacionamiento)
+
     return estacionamiento
 
 
@@ -80,6 +84,7 @@ def liberar_cupo(estacionamiento):
         f"Cupo liberado: piso {liberado['piso']}, lugar {liberado['cupo']}, "
         f"vehículo ID {liberado['vehiculo']}."
     )
+    guardar_lista_json("estacionamiento.json", estacionamiento)
     return estacionamiento
 
 

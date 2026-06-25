@@ -151,7 +151,6 @@ def baja_usuario(usuarios, vehiculos, estacionamiento):
         usuarios.pop(indice_usuario)
         
         # --- PERSISTENCIA EN JSON ---
-        from parking.archivos import guardar_lista_json
         guardar_lista_json("usuarios.json", usuarios)
         guardar_lista_json("vehiculos.json", vehiculos)
         guardar_lista_json("estacionamiento.json", estacionamiento)

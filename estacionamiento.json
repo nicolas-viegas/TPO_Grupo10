@@ -23,5 +23,20 @@
     "piso": 3,
     "cupo": 4,
     "vehiculo": 3
+  },
+  {
+    "piso": 1,
+    "cupo": 3,
+    "vehiculo": null
+  },
+  {
+    "piso": 3,
+    "cupo": 1,
+    "vehiculo": 6
+  },
+  {
+    "piso": 1,
+    "cupo": 4,
+    "vehiculo": 7
   }
 ]

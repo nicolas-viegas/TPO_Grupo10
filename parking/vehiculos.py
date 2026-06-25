@@ -1,3 +1,5 @@
+from parking.archivos import guardar_lista_json
+
 from parking.utilidades import (
     buscar_usuario_por_id,
     buscar_vehiculo_por_patente,
@@ -78,6 +80,8 @@ def alta_vehiculo(vehiculos, usuarios):
         }
     )
     print(f"Vehículo dado de alta. ID: {nuevo_id}. Tarifa mensual: ${tarifa}")
+    guardar_lista_json("vehiculos.json", vehiculos)
+
     return vehiculos
 
 
@@ -105,6 +109,10 @@ def baja_vehiculo(vehiculos, estacionamiento):
             vehiculos.pop(i)
             break
     print("Vehículo eliminado.")
+
+    guardar_lista_json("vehiculos.json", vehiculos)
+    guardar_lista_json("estacionamiento.json", estacionamiento)
+
     return vehiculos, estacionamiento
 
 
@@ -155,6 +163,8 @@ def modificar_vehiculo(vehiculos, usuarios):
                 print("Error: El ID de usuario no existe.")
         except ValueError:
             print("Error: El ID de usuario debe ser un número entero válido.")
+
+    guardar_lista_json("vehiculos.json", vehiculos)
     return vehiculos
 
 

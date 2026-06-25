@@ -33,5 +33,19 @@
     "tipo": "auto",
     "usuario": 4,
     "tarifa": 68000
+  },
+  {
+    "id": 6,
+    "patente": "ASD242",
+    "tipo": "camioneta",
+    "usuario": 7,
+    "tarifa": 95000
+  },
+  {
+    "id": 7,
+    "patente": "AS213DS",
+    "tipo": "moto",
+    "usuario": 7,
+    "tarifa": 42000
   }
 ]
