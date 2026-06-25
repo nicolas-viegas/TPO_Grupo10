@@ -139,7 +139,7 @@ def baja_usuario(usuarios, vehiculos, estacionamiento):
                 i_e = 0
                 while i_e < len(estacionamiento):
                     if estacionamiento[i_e]["vehiculo"] == id_vehiculo_a_borrar:
-                        estacionamiento[i_e]["vehiculo"] = None
+                        estacionamiento.pop(i_e)
                     i_e += 1
                 
                 # Borramos el vehículo
