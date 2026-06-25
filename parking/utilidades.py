@@ -12,19 +12,21 @@ from parking.constantes import (
 
 
 def cadena_a_entero(cadena):
-    """Usa int(); si el texto no es un entero >= 0, devuelve None (evita ValueError en los menús)."""
     if cadena is None:
         return None
     t = cadena.strip()
     if not t:
         return None
+        
     try:
+        # Intentamos la conversión directa
         n = int(t)
+        if n < 0:
+            return None
+        return n
     except ValueError:
+        # Atajamos el error si el usuario ingresó letras en lugar de números
         return None
-    if n < 0:
-        return None
-    return n
 
 
 def division_segura(numerador, denominador):
