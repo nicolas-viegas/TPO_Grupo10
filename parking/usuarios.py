@@ -1,3 +1,5 @@
+from parking.archivos import guardar_lista_json
+
 from parking.utilidades import (
     buscar_usuario_por_id,
     cadena_a_entero,
@@ -45,6 +47,7 @@ def alta_usuario(usuarios):
         "dni": dni
     })
     print(f"Usuario dado de alta. ID asignado: {nuevo_id}")
+    guardar_lista_json("usuarios.json", usuarios)
     return usuarios
 
 
@@ -95,10 +98,12 @@ def modificar_usuario(usuarios):
         print("Usuario actualizado.")
     except Exception:
         print("Error inesperado al modificar usuario.")
+    
+    guardar_lista_json("usuarios.json", usuarios)
     return usuarios
 
 
-def baja_usuario(usuarios):
+def baja_usuario(usuarios, vehiculos, estacionamiento):
     try:
         id_buscar = cadena_a_entero(input("Ingrese ID de usuario a eliminar: "))
         if id_buscar is None:
@@ -109,7 +114,11 @@ def baja_usuario(usuarios):
                 confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']}? (s/n): ").strip().lower()
                 if confirmar == "s":
                     usuarios.pop(i)
-                    print("Usuario eliminado.")
+                    guardar_lista_json("usuarios.json", usuarios)
+                    # También guardamos vehículos y estacionamiento porque la cascada los alteró
+                    guardar_lista_json("vehiculos.json", vehiculos)
+                    guardar_lista_json("estacionamiento.json", estacionamiento)
+                    print("Usuario y sus vehículos asociados eliminados correctamente.")
                 else:
                     print("Operación cancelada.")
                 return usuarios

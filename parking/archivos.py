@@ -50,3 +50,13 @@ def importar_matrices_json(ruta):
         return None
 
     return usuarios, vehiculos, estacionamiento
+
+def guardar_lista_json(ruta, lista):
+    """Guarda una lista específica en su archivo JSON correspondiente (Tema Clase 12)."""
+    try:
+        with open(ruta, "w", encoding="utf-8") as f:
+            json.dump(lista, f, ensure_ascii=False, indent=2)
+        return True
+    except OSError as exc:
+        print(f"Error al guardar datos en {ruta}: {exc}")
+        return False

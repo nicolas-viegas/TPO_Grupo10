@@ -104,7 +104,7 @@ def _bucle_operador(lista_usuarios, lista_vehiculos, lista_estacionamiento, usua
                 elif sub == "4":
                     usuarios.modificar_usuario(lista_usuarios)
                 elif sub == "5":
-                    usuarios.baja_usuario(lista_usuarios)
+                    usuarios.baja_usuario(lista_usuarios, lista_vehiculos, lista_estacionamiento)
 
                 input("\nPresione ENTER para continuar.")
 
