@@ -16,11 +16,5 @@
     "nombre": "Pedro",
     "apellido": "López",
     "dni": "20999888"
-  },
-  {
-    "id": 5,
-    "nombre": "Nicolas",
-    "apellido": "Viegas",
-    "dni": "42177414"
   }
 ]

@@ -26,5 +26,12 @@
     "tipo": "auto",
     "usuario": 4,
     "tarifa": 68000
+  },
+  {
+    "id": 6,
+    "patente": "ASD213",
+    "tipo": "moto",
+    "usuario": 4,
+    "tarifa": 42000
   }
 ]
