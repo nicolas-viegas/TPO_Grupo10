@@ -1,6 +1,32 @@
 [
-    {"id": 1, "nombre": "Ana", "apellido": "García", "dni": "28111222"},
-    {"id": 2, "nombre": "Luis", "apellido": "Rodríguez", "dni": "35111222"},
-    {"id": 3, "nombre": "María", "apellido": "Fernández", "dni": "40111222"},
-    {"id": 4, "nombre": "Pedro", "apellido": "López", "dni": "20999888"}
+  {
+    "id": 1,
+    "nombre": "Ana",
+    "apellido": "Gomez",
+    "dni": "28111222"
+  },
+  {
+    "id": 3,
+    "nombre": "María",
+    "apellido": "Fernández",
+    "dni": "40111222"
+  },
+  {
+    "id": 4,
+    "nombre": "Pedro",
+    "apellido": "López",
+    "dni": "20999888"
+  },
+  {
+    "id": 5,
+    "nombre": "Nicolas",
+    "apellido": "Viegas",
+    "dni": "42177414"
+  },
+  {
+    "id": 7,
+    "nombre": "Ni",
+    "apellido": "Vi",
+    "dni": "6532412"
+  }
 ]

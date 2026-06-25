@@ -111,14 +111,21 @@ def buscar_vehiculo_por_patente(vehiculos, patente):
     return encontrado
 
 
-def buscar_vehiculo_por_id(vehiculos, id_vehiculo):
-    i = 0
-    encontrado = None
-    while i < len(vehiculos) and encontrado is None:
-        if vehiculos[i]["id"] == id_vehiculo:
-            encontrado = vehiculos[i]
-        i += 1
-    return encontrado
+def buscar_vehiculo_por_id(vehiculos, id_vehiculo, indice=0):
+    """
+    Búsqueda de vehículo por ID usando recursividad.
+    Reemplaza la estructura iterativa por una llamada recursiva.
+    """
+    # Caso base 1: llegamos al final de la lista sin encontrarlo (reducción del dominio)
+    if indice >= len(vehiculos):
+        return None
+        
+    # Caso base 2: encontramos el vehículo en el índice actual
+    if vehiculos[indice]["id"] == id_vehiculo:
+        return vehiculos[indice]
+        
+    # Caso recursivo: nos llamamos a nosotros mismos avanzando al siguiente índice
+    return buscar_vehiculo_por_id(vehiculos, id_vehiculo, indice + 1)
 
 
 def piso_para_tipo(tipo):

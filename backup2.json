@@ -1,0 +1,93 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Ana",
+      "apellido": "Gomez",
+      "dni": "28111222"
+    },
+    {
+      "id": 3,
+      "nombre": "María",
+      "apellido": "Fernández",
+      "dni": "40111222"
+    },
+    {
+      "id": 4,
+      "nombre": "Pedro",
+      "apellido": "López",
+      "dni": "20999888"
+    },
+    {
+      "id": 5,
+      "nombre": "Nicolas",
+      "apellido": "Viegas",
+      "dni": "42177414"
+    },
+    {
+      "id": 7,
+      "nombre": "Ni",
+      "apellido": "Vi",
+      "dni": "6532412"
+    }
+  ],
+  "vehiculos": [
+    {
+      "id": 1,
+      "patente": "AB123CD",
+      "tipo": "moto",
+      "usuario": 1,
+      "tarifa": 42000
+    },
+    {
+      "id": 5,
+      "patente": "CD456EF",
+      "tipo": "auto",
+      "usuario": 4,
+      "tarifa": 68000
+    },
+    {
+      "id": 4,
+      "patente": "MOTO99",
+      "tipo": "moto",
+      "usuario": 3,
+      "tarifa": 42000
+    },
+    {
+      "id": 6,
+      "patente": "SAD213",
+      "tipo": "camioneta",
+      "usuario": 7,
+      "tarifa": 95000
+    },
+    {
+      "id": 2,
+      "patente": "XY987ZZ",
+      "tipo": "auto",
+      "usuario": 1,
+      "tarifa": 68000
+    }
+  ],
+  "estacionamiento": [
+    {
+      "piso": 1,
+      "cupo": 1,
+      "vehiculo": 1
+    },
+    {
+      "piso": 1,
+      "cupo": 2,
+      "vehiculo": 4
+    },
+    {
+      "piso": 2,
+      "cupo": 1,
+      "vehiculo": 2
+    },
+    {
+      "piso": 2,
+      "cupo": 3,
+      "vehiculo": 5
+    }
+  ]
+}

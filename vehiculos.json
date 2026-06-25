@@ -1,7 +1,37 @@
 [
-    {"id": 1, "patente": "AB123CD", "tipo": "moto", "usuario": 1, "tarifa": 42000},
-    {"id": 2, "patente": "XY987ZZ", "tipo": "auto", "usuario": 1, "tarifa": 68000},
-    {"id": 3, "patente": "AA000BB", "tipo": "camioneta", "usuario": 2, "tarifa": 95000},
-    {"id": 4, "patente": "MOTO99", "tipo": "moto", "usuario": 3, "tarifa": 42000},
-    {"id": 5, "patente": "CD456EF", "tipo": "auto", "usuario": 4, "tarifa": 68000}
+  {
+    "id": 1,
+    "patente": "AB123CD",
+    "tipo": "moto",
+    "usuario": 1,
+    "tarifa": 42000
+  },
+  {
+    "id": 2,
+    "patente": "XY987ZZ",
+    "tipo": "auto",
+    "usuario": 1,
+    "tarifa": 68000
+  },
+  {
+    "id": 3,
+    "patente": "AA000BB",
+    "tipo": "camioneta",
+    "usuario": 2,
+    "tarifa": 95000
+  },
+  {
+    "id": 4,
+    "patente": "MOTO99",
+    "tipo": "moto",
+    "usuario": 3,
+    "tarifa": 42000
+  },
+  {
+    "id": 5,
+    "patente": "CD456EF",
+    "tipo": "auto",
+    "usuario": 4,
+    "tarifa": 68000
+  }
 ]

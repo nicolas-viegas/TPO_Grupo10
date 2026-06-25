@@ -6,6 +6,7 @@ from parking.utilidades import (
     tarifa_mensual_por_tipo,
     validar_patente,
     formatear_patente,
+    indice_cupo_por_id_vehiculo,
 )
 
 

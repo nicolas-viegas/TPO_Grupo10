@@ -1,7 +1,6 @@
 """
 -----------------------------------------------------------------------------------------------
 Título: Sistema de estacionamiento — TP Programación I
-Fecha: Abril 2026
 Autor: Grupo 10
 
 Descripción:
@@ -11,16 +10,7 @@ Descripción:
     ). Los datos son listas de diccionarios. Incluye
     manejo de excepciones para entradas
     inválidas, división por cero, interrupción del usuario y operaciones de archivo.
-    Punto de entrada: main().
 -----------------------------------------------------------------------------------------------
-"""
-
-"""
----------------------------------------------------------------------
-Título: Sistema de estacionamiento — TP Programación I
-Fecha: Abril 2026
-Autor: Grupo 10
------------------------------------------------------------------------
 """
 
 from parking.auth import iniciar_sesion

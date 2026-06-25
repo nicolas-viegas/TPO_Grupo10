@@ -108,21 +108,57 @@ def baja_usuario(usuarios, vehiculos, estacionamiento):
         id_buscar = cadena_a_entero(input("Ingrese ID de usuario a eliminar: "))
         if id_buscar is None:
             print("ID inválido.")
-            return usuarios
-        for i, u in enumerate(usuarios):
-            if u["id"] == id_buscar:
-                confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']}? (s/n): ").strip().lower()
-                if confirmar == "s":
-                    usuarios.pop(i)
-                    guardar_lista_json("usuarios.json", usuarios)
-                    # También guardamos vehículos y estacionamiento porque la cascada los alteró
-                    guardar_lista_json("vehiculos.json", vehiculos)
-                    guardar_lista_json("estacionamiento.json", estacionamiento)
-                    print("Usuario y sus vehículos asociados eliminados correctamente.")
-                else:
-                    print("Operación cancelada.")
-                return usuarios
-        print("No existe un usuario con ese ID.")
+            return usuarios # Retorna
+        
+        # Buscamos al usuario
+        i = 0
+        u = None
+        indice_usuario = None
+        while i < len(usuarios) and u is None:
+            if usuarios[i]["id"] == id_buscar:
+                u = usuarios[i]
+                indice_usuario = i
+            i += 1
+            
+        if u is None:
+            print("No existe un usuario con ese ID.")
+            return usuarios # Retorna
+
+        confirmar = input(f"¿Eliminar a {u['nombre']} {u['apellido']} y TODOS sus vehículos asociados? (s/n): ").strip().lower()
+        if confirmar != "s":
+            print("Operación cancelada.")
+            return usuarios # Retorna
+
+        # --- INICIO DE ELIMINACIÓN EN CASCADA ---
+        i_v = 0
+        while i_v < len(vehiculos):
+            if vehiculos[i_v]["usuario"] == id_buscar:
+                id_vehiculo_a_borrar = vehiculos[i_v]["id"]
+                
+                # Liberamos el cupo
+                i_e = 0
+                while i_e < len(estacionamiento):
+                    if estacionamiento[i_e]["vehiculo"] == id_vehiculo_a_borrar:
+                        estacionamiento[i_e]["vehiculo"] = None
+                    i_e += 1
+                
+                # Borramos el vehículo
+                vehiculos.pop(i_v)
+            else:
+                i_v += 1
+                
+        # Eliminamos al usuario
+        usuarios.pop(indice_usuario)
+        
+        # --- PERSISTENCIA EN JSON ---
+        from parking.archivos import guardar_lista_json
+        guardar_lista_json("usuarios.json", usuarios)
+        guardar_lista_json("vehiculos.json", vehiculos)
+        guardar_lista_json("estacionamiento.json", estacionamiento)
+
+        print("Usuario, sus vehículos y sus cupos de estacionamiento eliminados correctamente.")
+        return usuarios # Retorna al finalizar con éxito
+        
     except Exception:
         print("Error inesperado en la baja de usuario.")
-    return usuarios
+        return usuarios # Retorna si hay error
